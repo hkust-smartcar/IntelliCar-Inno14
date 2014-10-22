@@ -24,6 +24,7 @@ public:
 
 private:
 	void Breath();
+	void Beep();
 
 	Car m_car;
 	Looper m_looper;
