@@ -70,6 +70,11 @@ public:
 		m_uart.EnableRx(l);
 	}
 
+	void SetBeep(const bool flag)
+	{
+		m_buzzer.SetBeep(flag);
+	}
+
 private:
 	libsc::k60::Encoder m_encoder;
 	libsc::k60::Led m_leds[4];
