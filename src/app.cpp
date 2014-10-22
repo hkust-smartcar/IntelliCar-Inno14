@@ -41,10 +41,10 @@ void App::Breath()
 	m_looper.RunAfter(200, std::bind(&App::Breath, this));
 }
 
-void App::Beep()
+void App::Beep(const uint32_t duration)
 {
 	m_car.SetBeep(true);
-	m_looper.RunAfter(150,
+	m_looper.RunAfter(duration,
 			[this](const Timer::TimerInt, const Timer::TimerInt)
 			{
 				m_car.SetBeep(false);

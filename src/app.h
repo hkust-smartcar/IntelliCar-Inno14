@@ -8,6 +8,8 @@
 
 #pragma once
 
+#include <cstdint>
+
 #include "car.h"
 #include "looper.h"
 
@@ -24,7 +26,7 @@ public:
 
 private:
 	void Breath();
-	void Beep();
+	void Beep(const uint32_t duration);
 
 	Car m_car;
 	Looper m_looper;
