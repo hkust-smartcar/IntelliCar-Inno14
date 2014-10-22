@@ -39,7 +39,8 @@ void Looper::Loop()
 	Timer::TimerInt prev = System::Time();
 	while (m_is_run)
 	{
-		if (System::Time() != prev)
+		const Timer::TimerInt now = System::Time();
+		if (now != prev)
 		{
 			Scan();
 			prev = now;
