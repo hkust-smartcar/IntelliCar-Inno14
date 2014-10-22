@@ -29,6 +29,8 @@ void App::Run()
 	m_car.SetLed(0, true);
 	m_car.SetLed(2, true);
 	m_looper.RunAfter(200, std::bind(&App::Breath, this));
+	Beep(200);
+
 	m_looper.Loop();
 }
 
