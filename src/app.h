@@ -8,7 +8,10 @@
 
 #pragma once
 
+#include <cstddef>
 #include <cstdint>
+
+#include <libutil/misc.h>
 
 #include "car.h"
 #include "looper.h"
@@ -27,6 +30,7 @@ public:
 private:
 	void Breath();
 	void Beep(const uint32_t duration);
+	void OnUartReceive(const Byte *bytes, const size_t size);
 
 	Car m_car;
 	Looper m_looper;
