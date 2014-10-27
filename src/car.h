@@ -75,6 +75,11 @@ public:
 		m_buzzer.SetBeep(flag);
 	}
 
+	bool GetBeep() const
+	{
+		return m_buzzer.GetBeep();
+	}
+
 private:
 	libsc::k60::Encoder m_encoder;
 	libsc::k60::Led m_leds[4];
