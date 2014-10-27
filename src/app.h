@@ -28,6 +28,8 @@ public:
 	void Run();
 
 private:
+	class Intepreter;
+
 	void Breath();
 	void Beep(const uint32_t duration);
 	void OnUartReceive(const Byte *bytes, const size_t size);

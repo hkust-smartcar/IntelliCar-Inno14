@@ -28,23 +28,24 @@ using namespace std;
 #define SPD_MASK 0x3F
 #define SPD_SHIFT 0
 
+#define FLAG_BEEP_MASK 0x1
+#define FLAG_BEEP_SHIFT 0
+
 namespace inno
 {
 
-namespace
-{
-
-class Intepreter
+class App::Intepreter
 {
 public:
-	static void ProcessCommand(const Byte cmd, Car *car);
+	static void ProcessCommand(const Byte cmd, App *parent);
 
 private:
-	static void ProcessTurnCommand(const Byte cmd, Car *car);
-	static void ProcessSpeedCommand(const Byte cmd, Car *car);
+	static void ProcessTurnCommand(const Byte cmd, App *parent);
+	static void ProcessSpeedCommand(const Byte cmd, App *parent);
+	static void ProcessFlagCommand(const Byte cmd, App *parent);
 };
 
-void Intepreter::ProcessCommand(const Byte cmd, Car *car)
+void App::Intepreter::ProcessCommand(const Byte cmd, App *parent)
 {
 	if (cmd == CMD(3))
 	{
@@ -52,34 +53,40 @@ void Intepreter::ProcessCommand(const Byte cmd, Car *car)
 	}
 	else if (cmd == CMD(2))
 	{
-		ProcessTurnCommand(cmd, car);
+		ProcessTurnCommand(cmd, parent);
 	}
 	else if (cmd == CMD(1))
 	{
-		ProcessSpeedCommand(cmd, car);
+		ProcessSpeedCommand(cmd, parent);
 	}
 	else // cmd == CMD(0)
 	{
-
+		ProcessFlagCommand(cmd, parent);
 	}
 }
 
-void Intepreter::ProcessTurnCommand(const Byte cmd, Car *car)
+void App::Intepreter::ProcessTurnCommand(const Byte cmd, App *parent)
 {
 	const int turn = cmd & TURN_MASK;
 	// [0, 0x3F] -> [-1000, 1000]
 	const int expand = turn * 2000 / TURN_MASK - 1000;
-	car->SetTurning(expand);
+	parent->m_car.SetTurning(expand);
 }
 
-void Intepreter::ProcessSpeedCommand(const Byte cmd, Car *car)
+void App::Intepreter::ProcessSpeedCommand(const Byte cmd, App *parent)
 {
 	const int spd = cmd & SPD_MASK;
 	// [0, 0x3F] -> [-1000, 1000]
 	const int expand = spd * 2000 / TURN_MASK - 1000;
-	car->SetMotorPower(expand);
+	parent->m_car.SetMotorPower(expand);
 }
 
+void App::Intepreter::ProcessFlagCommand(const Byte cmd, App *parent)
+{
+	if ((cmd & FLAG_BEEP_MASK) && !parent->m_car.GetBeep())
+	{
+		parent->Beep(500);
+	}
 }
 
 App::App()
@@ -124,7 +131,7 @@ void App::OnUartReceive(const Byte *bytes, const size_t size)
 {
 	for (size_t i = 0; i < size; ++i)
 	{
-		Intepreter::ProcessCommand(bytes[i], &m_car);
+		Intepreter::ProcessCommand(bytes[i], this);
 	}
 }
 
