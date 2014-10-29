@@ -49,19 +49,19 @@ private:
 
 void App::Intepreter::ProcessCommand(const Byte cmd, App *parent)
 {
-	if (cmd == CMD(3))
+	if ((cmd & CMD_MASK) == CMD(3))
 	{
 
 	}
-	else if (cmd == CMD(2))
+	else if ((cmd & CMD_MASK) == CMD(2))
 	{
 		ProcessTurnCommand(cmd, parent);
 	}
-	else if (cmd == CMD(1))
+	else if ((cmd & CMD_MASK) == CMD(1))
 	{
 		ProcessSpeedCommand(cmd, parent);
 	}
-	else // cmd == CMD(0)
+	else // (cmd & CMD_MASK) == CMD(0)
 	{
 		ProcessFlagCommand(cmd, parent);
 	}
