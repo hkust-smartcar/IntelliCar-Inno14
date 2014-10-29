@@ -14,7 +14,7 @@
 #include <libsc/k60/led.h>
 #include <libsc/k60/motor.h>
 #include <libsc/k60/simple_buzzer.h>
-#include <libsc/k60/trs_d05.h>
+#include <libsc/k60/tower_pro_mg995.h>
 #include <libsc/k60/uart_device.h>
 
 namespace inno
@@ -90,7 +90,7 @@ private:
 	libsc::k60::Led m_leds[4];
 	libsc::k60::Motor m_motor;
 	libsc::k60::SimpleBuzzer m_buzzer;
-	libsc::k60::TrsD05 m_servo;
+	libsc::k60::TowerProMg995 m_servo;
 	libsc::k60::UartDevice m_uart;
 };
 
