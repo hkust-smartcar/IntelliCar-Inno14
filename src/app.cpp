@@ -30,6 +30,8 @@ using namespace std;
 
 #define FLAG_BEEP_MASK 0x1
 #define FLAG_BEEP_SHIFT 0
+#define FLAG_LED_MASK 0x2
+#define FLAG_LED_SHIFT 1
 
 namespace inno
 {
@@ -87,6 +89,10 @@ void App::Intepreter::ProcessFlagCommand(const Byte cmd, App *parent)
 	{
 		parent->Beep(500);
 	}
+	if (cmd & FLAG_LED_MASK)
+	{
+		parent->m_car.SwitchLed(3);
+	}
 }
 
 App::App()
@@ -99,7 +105,6 @@ void App::Run()
 {
 	System::Init();
 	m_car.SetLed(0, true);
-	m_car.SetLed(2, true);
 	m_car.EnableUartRx(std::bind(&App::OnUartReceive, this, placeholders::_1,
 			placeholders::_2));
 	m_looper.RunAfter(200, std::bind(&App::Breath, this));
@@ -112,8 +117,6 @@ void App::Breath()
 {
 	m_car.SwitchLed(0);
 	m_car.SwitchLed(1);
-	m_car.SwitchLed(2);
-	m_car.SwitchLed(3);
 	m_looper.RunAfter(200, std::bind(&App::Breath, this));
 }
 
