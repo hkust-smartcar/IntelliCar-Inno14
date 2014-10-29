@@ -104,6 +104,8 @@ App::~App()
 void App::Run()
 {
 	System::Init();
+	m_car.UartSendLiteral("Welcome to InnoCarnival 2014\n");
+	m_car.UartSendLiteral("Hello from Smart Car\n");
 	m_car.SetLed(0, true);
 	m_car.EnableUartRx(std::bind(&App::OnUartReceive, this, placeholders::_1,
 			placeholders::_2));
