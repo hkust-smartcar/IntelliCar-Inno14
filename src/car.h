@@ -55,14 +55,19 @@ public:
 		m_encoder.Update();
 	}
 
-	bool UartPeekChar(char *out_ch)
-	{
-		return m_uart.PeekChar(out_ch);
-	}
-
 	int16_t GetEncoderCount()
 	{
 		return m_encoder.GetCount();
+	}
+
+	void UartSendLiteral(const char *literal)
+	{
+		return m_uart.SendStrLiteral(literal);
+	}
+
+	bool UartPeekChar(char *out_ch)
+	{
+		return m_uart.PeekChar(out_ch);
 	}
 
 	void EnableUartRx(const libsc::k60::UartDevice::OnReceiveListener &l)
