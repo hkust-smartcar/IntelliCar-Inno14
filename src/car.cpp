@@ -51,7 +51,7 @@ void Car::SetMotorPower(const int16_t power)
 void Car::SetTurning(const int16_t percentage)
 {
 	// Servo's rotation dir is opposite to our wheels
-	const int percentage_ = libutil::Clamp<int>(-100, -percentage, 100);
+	const int percentage_ = libutil::Clamp<int>(-1000, -percentage, 1000);
 	const int degree = SERVO_MID_DEGREE + (percentage_ * SERVO_AMPLITUDE / 1000);
 	m_servo.SetDegree(degree);
 }
