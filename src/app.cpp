@@ -40,58 +40,43 @@ class App::Intepreter
 {
 public:
 	static void ProcessCommand(const Byte cmd, App *parent);
-
-private:
-	static void ProcessTurnCommand(const Byte cmd, App *parent);
-	static void ProcessSpeedCommand(const Byte cmd, App *parent);
-	static void ProcessFlagCommand(const Byte cmd, App *parent);
 };
 
 void App::Intepreter::ProcessCommand(const Byte cmd, App *parent)
 {
-	if ((cmd & CMD_MASK) == CMD(3))
+	switch (cmd)
 	{
+	case 'L':
+		parent->m_car.SetTurning(-1000);
+		break;
 
-	}
-	else if ((cmd & CMD_MASK) == CMD(2))
-	{
-		ProcessTurnCommand(cmd, parent);
-	}
-	else if ((cmd & CMD_MASK) == CMD(1))
-	{
-		ProcessSpeedCommand(cmd, parent);
-	}
-	else // (cmd & CMD_MASK) == CMD(0)
-	{
-		ProcessFlagCommand(cmd, parent);
-	}
-}
+	case 'M':
+		parent->m_car.SetTurning(0);
+		break;
 
-void App::Intepreter::ProcessTurnCommand(const Byte cmd, App *parent)
-{
-	const int turn = cmd & TURN_MASK;
-	// [0, 0x3F] -> [-1000, 1000]
-	const int expand = turn * 2000 / TURN_MASK - 1000;
-	parent->m_car.SetTurning(expand);
-}
+	case 'R':
+		parent->m_car.SetTurning(1000);
+		break;
 
-void App::Intepreter::ProcessSpeedCommand(const Byte cmd, App *parent)
-{
-	const int spd = cmd & SPD_MASK;
-	// [0, 0x3F] -> [-1000, 1000]
-	const int expand = spd * 2000 / TURN_MASK - 1000;
-	parent->m_car.SetMotorPower(expand);
-}
+	case '0':
+		parent->m_car.SetMotorPower(0);
+		break;
 
-void App::Intepreter::ProcessFlagCommand(const Byte cmd, App *parent)
-{
-	if ((cmd & FLAG_BEEP_MASK) && !parent->m_car.GetBeep())
-	{
-		parent->Beep(500);
-	}
-	if (cmd & FLAG_LED_MASK)
-	{
-		parent->m_car.SwitchLed(3);
+	case '1':
+		parent->m_car.SetMotorPower(210);
+		break;
+
+	case '2':
+		parent->m_car.SetMotorPower(250);
+		break;
+
+	case '3':
+		parent->m_car.SetMotorPower(290);
+		break;
+
+	case 'B':
+		parent->m_car.SetMotorPower(-210);
+		break;
 	}
 }
 
