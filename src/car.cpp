@@ -24,7 +24,7 @@ using namespace libsc::k60;
 using namespace std;
 
 #define SERVO_MID_DEGREE 900
-#define SERVO_AMPLITUDE 400
+#define SERVO_AMPLITUDE 350
 
 namespace inno
 {
