@@ -9,9 +9,9 @@
 #include <cstddef>
 #include <memory>
 
+#include <libsc/k60/alternate_motor.h>
 #include <libsc/k60/encoder.h>
 #include <libsc/k60/led.h>
-#include <libsc/k60/motor.h>
 #include <libsc/k60/simple_buzzer.h>
 #include <libsc/k60/trs_d05.h>
 #include <libsc/k60/uart_device.h>
@@ -29,10 +29,22 @@ using namespace std;
 namespace inno
 {
 
+namespace
+{
+
+AlternateMotor::Config GetMotorConfig(const uint8_t id)
+{
+	AlternateMotor::Config config;
+	config.id = id;
+	return config;
+}
+
+}
+
 Car::Car()
 		: m_encoder(0),
 		  m_leds{Led(0), Led(1), Led(2), Led(3)},
-		  m_motor(0, false),
+		  m_motor(GetMotorConfig(0)),
 		  m_buzzer({0}),
 		  m_servo(0),
 		  m_uart(0, libbase::k60::Uart::Config::BaudRate::k115200)
