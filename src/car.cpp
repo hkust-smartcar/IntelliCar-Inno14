@@ -42,12 +42,12 @@ AlternateMotor::Config GetMotorConfig(const uint8_t id)
 }
 
 Car::Car()
-		: m_encoder(0),
-		  m_leds{Led(0), Led(1), Led(2), Led(3)},
+		: m_encoder({0}),
+		  m_leds{Led({0}), Led({1}), Led({2}), Led({3})},
 		  m_motor(GetMotorConfig(0)),
 		  m_buzzer({0}),
-		  m_servo(0),
-		  m_uart(0, libbase::k60::Uart::Config::BaudRate::k115200)
+		  m_servo({0}),
+		  m_uart({0, libbase::k60::Uart::Config::BaudRate::k115200})
 {}
 
 Car::~Car()
