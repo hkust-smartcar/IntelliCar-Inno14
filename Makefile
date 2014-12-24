@@ -175,7 +175,7 @@ dry: $(OBJ_FILES)
 
 $(OUT_EXE_PATH)/$(OUT_EXE)$(BIN_SUFFIX)$(OUT_EXE_SUFFIX): $(OBJ_FILES) $(LIBSCSS_BIN_PATH)/lib$(LIBSCSS_BIN)$(BIN_SUFFIX).a
 	$(info Linking objects)
-	@$(CXX) $(LDFLAGS) -o $@ $^ $(LDLIBS)
+	@$(CXX) $(LDFLAGS) -o $@ $(OBJ_FILES) $(LDLIBS)
 
 $(OUT_OBJ_PATH)/%.o: $$(subst $(BIN_SUFFIX),,$(SRC_PATH)/%.c)
 	$(info Compiling $(<))
