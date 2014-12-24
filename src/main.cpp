@@ -6,6 +6,8 @@
  * Refer to LICENSE for details
  */
 
+#include <libbase/k60/mcg.h>
+
 #include "app.h"
 
 using namespace inno;
