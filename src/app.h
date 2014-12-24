@@ -11,10 +11,10 @@
 #include <cstddef>
 #include <cstdint>
 
+#include <libutil/looper.h>
 #include <libutil/misc.h>
 
 #include "car.h"
-#include "looper.h"
 
 namespace inno
 {
@@ -35,7 +35,7 @@ private:
 	void OnUartReceive(const Byte *bytes, const size_t size);
 
 	Car m_car;
-	Looper m_looper;
+	libutil::Looper m_looper;
 };
 
 }
