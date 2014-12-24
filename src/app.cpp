@@ -9,11 +9,11 @@
 #include <functional>
 
 #include <libsc/k60/system.h>
+#include <libutil/looper.h>
 #include <libutil/misc.h>
 
 #include "app.h"
 #include "car.h"
-#include "looper.h"
 
 using namespace libsc::k60;
 using namespace std;
