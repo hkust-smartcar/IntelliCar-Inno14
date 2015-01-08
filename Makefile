@@ -1,9 +1,9 @@
 INC_PATH=inc
 SRC_PATH=src
 BUILD_PATH=build
-LIBSCSS_INC_PATH=lib/sccc/inc
-LIBSCSS_BIN_PATH=lib/sccc/lib
-LIBSCSS_BIN=sccc
+LIBSCCC_INC_PATH?=lib/sccc/inc
+LIBSCCC_BIN_PATH?=lib/sccc/lib
+LIBSCCC_BIN?=sccc
 OUT_EXE=inno14
 OUT_EXE_SUFFIX=.elf
 OUT_EXE_PATH=bin
@@ -14,7 +14,7 @@ CC=$(TOOLCHAIN_PREFIX)gcc
 CXX=$(TOOLCHAIN_PREFIX)g++
 AR=$(TOOLCHAIN_PREFIX)ar
 
-# Additional include dirs and libs. libscss will be added automatically
+# Additional include dirs and libs. libsccc will be added automatically
 ALL_INC_PATHS=$(INC_PATH) $(SRC_PATH)
 ALL_LIB_PATHS=
 ALL_LIBS=
@@ -56,7 +56,7 @@ BIN_SUFFIX=
 LDFLAGS=
 LDLIBS=
 
-CPPFLAGS+=$(addprefix -I,$(ALL_INC_PATHS)) -I$(LIBSCSS_INC_PATH)
+CPPFLAGS+=$(addprefix -I,$(ALL_INC_PATHS)) -I$(LIBSCCC_INC_PATH)
 CPPFLAGS+=$(addprefix -D,$(ALL_SYMBOLS))
 CPPFLAGS+=-MMD
 
@@ -67,20 +67,20 @@ CCFLAGS+=-Wall -Wextra
 
 ifeq ($(SCCC_BUILD),DEBUG)
 BIN_SUFFIX:=$(BIN_SUFFIX)-d
-CPPFLAGS+=-DDEBUG
+CPPFLAGS+=-DDEBUG=1
 CCFLAGS+=-O0 -g3
 $(info Build = DEBUG)
 
 else ifeq ($(SCCC_BUILD),RELEASE)
 BIN_SUFFIX:=$(BIN_SUFFIX)-r
-CPPFLAGS+=-DRELEASE -DNDEBUG
+CPPFLAGS+=-DRELEASE=1 -DNDEBUG
 CCFLAGS+=-O2 -g0
 $(info Build = RELEASE)
 
 else
 $(warning Unknown build type, defaulting to DEBUG (set SCCC_BUILD))
 BIN_SUFFIX:=$(BIN_SUFFIX)-d
-CPPFLAGS+=-DDEBUG
+CPPFLAGS+=-DDEBUG=1
 CCFLAGS+=-O0 -g3
 $(info Build = DEBUG)
 
@@ -89,20 +89,31 @@ endif
 include MakeConfig.inc
 
 ifeq ($(SCCC_MCU),MK60DZ10)
-CPPFLAGS+=-DMK60DZ10
+CPPFLAGS+=-DMK60DZ10=1
 CCFLAGS+=-mthumb -mthumb-interwork -mcpu=cortex-m4
 CCFLAGS+=-msoft-float -mfloat-abi=soft
 LDFLAGS+=-mthumb -mthumb-interwork -mcpu=cortex-m4
 LDFLAGS+=-msoft-float -mfloat-abi=soft
+LDFLAGS+=-T $(BUILD_PATH)/d10.ld
 $(info MCU sub-family = MK60DZ10)
 
 else ifeq ($(SCCC_MCU),MK60D10)
-CPPFLAGS+=-DMK60D10
+CPPFLAGS+=-DMK60D10=1
 CCFLAGS+=-mthumb -mthumb-interwork -mcpu=cortex-m4
 CCFLAGS+=-msoft-float -mfloat-abi=soft
 LDFLAGS+=-mthumb -mthumb-interwork -mcpu=cortex-m4
 LDFLAGS+=-msoft-float -mfloat-abi=soft
+LDFLAGS+=-T $(BUILD_PATH)/d10.ld
 $(info MCU sub-family = MK60D10)
+
+else ifeq ($(SCCC_MCU),MK60F15)
+CPPFLAGS+=-DMK60F15=1
+CCFLAGS+=-mthumb -mthumb-interwork -mcpu=cortex-m4
+CCFLAGS+=-mfpu=fpv4-sp-d16 -mfloat-abi=hard
+LDFLAGS+=-mthumb -mthumb-interwork -mcpu=cortex-m4
+LDFLAGS+=-mfpu=fpv4-sp-d16 -mfloat-abi=hard
+LDFLAGS+=-T $(BUILD_PATH)/f15.ld
+$(info MCU sub-family = MK60F15)
 
 else
 $(error Missing/Unknown MCU identifier '$(SCCC_MCU)' (set SCCC_MCU))
@@ -125,13 +136,13 @@ CXXFLAGS+=-fno-exceptions -fno-rtti
 
 ARFLAGS+=-r
 
-LDFLAGS+=-nostartfiles -T $(BUILD_PATH)/k60.ld
+# LDFLAGS+=-nostartfiles
 LDFLAGS+=-specs=nano.specs -u _printf_float
 LDFLAGS+=-Wl,--gc-sections
 LDFLAGS+=-Wl,-Map=$(OUT_EXE_PATH)/$(OUT_EXE)$(BIN_SUFFIX).map
 
-LDFLAGS+=$(addprefix -L,$(ALL_LIB_PATHS)) -L$(LIBSCSS_BIN_PATH)
-LDLIBS+=$(addprefix -l,$(ALL_LIBS)) -l$(LIBSCSS_BIN)$(BIN_SUFFIX)
+LDFLAGS+=$(addprefix -L,$(ALL_LIB_PATHS)) -L$(LIBSCCC_BIN_PATH)
+LDLIBS+=$(addprefix -l,$(ALL_LIBS)) -l$(LIBSCCC_BIN)$(BIN_SUFFIX)
 
 # End setting flags
 
@@ -173,7 +184,7 @@ dry: $(OBJ_FILES)
 
 .SECONDEXPANSION:
 
-$(OUT_EXE_PATH)/$(OUT_EXE)$(BIN_SUFFIX)$(OUT_EXE_SUFFIX): $(OBJ_FILES) $(LIBSCSS_BIN_PATH)/lib$(LIBSCSS_BIN)$(BIN_SUFFIX).a
+$(OUT_EXE_PATH)/$(OUT_EXE)$(BIN_SUFFIX)$(OUT_EXE_SUFFIX): $(OBJ_FILES) $(LIBSCCC_BIN_PATH)/lib$(LIBSCCC_BIN)$(BIN_SUFFIX).a
 	$(info Linking objects)
 	@$(CXX) $(LDFLAGS) -o $@ $(OBJ_FILES) $(LDLIBS)
 
